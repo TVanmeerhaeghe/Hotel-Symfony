@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>Voici la liste des Hotels disponible chez Teo and Co</h1>
+{% for etablissement in etablissements %}
+    <div>
+        <ul>
+            <li><a href="{{ path('hotel_details',{id : etablissement.id})}}">{{ etablissement.nom }}</a></li>
+            <li>{{ etablissement.ville }}</li>
+            <li>{{ etablissement.adresse }}</li>
+            <li>{{ etablissement.description }}</li>
+        </ul>
+    </div>
+{% endfor %}
+{% endblock %}
