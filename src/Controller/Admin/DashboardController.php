@@ -8,6 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+
 use App\Entity\EtablissementHotel;
 use App\Entity\GerantHotel;
 use App\Entity\SuiteHotel;
