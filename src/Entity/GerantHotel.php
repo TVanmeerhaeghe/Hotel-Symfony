@@ -22,8 +22,12 @@ class GerantHotel
     #[ORM\Column(length: 110)]
     private ?string $mail = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $mdp = null;
+    #[ORM\Column(length: 180)]
+    private ?string $password = null;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?EtablissementHotel $etablissement_hotel = null;
 
     public function getId(): ?int
     {
@@ -66,14 +70,26 @@ class GerantHotel
         return $this;
     }
 
-    public function getMdp(): ?string
+    public function getPassword(): ?string
     {
-        return $this->mdp;
+        return $this->password;
     }
 
-    public function setMdp(string $mdp): self
+    public function setPassword(string $password): self
     {
-        $this->mdp = $mdp;
+        $this->password = $password;
+
+        return $this;
+    }
+
+    public function getEtablissementHotel(): ?EtablissementHotel
+    {
+        return $this->etablissement_hotel;
+    }
+
+    public function setEtablissementHotel(EtablissementHotel $etablissement_hotel): self
+    {
+        $this->etablissement_hotel = $etablissement_hotel;
 
         return $this;
     }
