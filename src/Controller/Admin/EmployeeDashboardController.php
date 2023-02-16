@@ -8,31 +8,26 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-
-use App\Entity\EtablissementHotel;
-use App\Entity\GerantHotel;
 use App\Entity\SuiteHotel;
 
-class DashboardController extends AbstractDashboardController
+class EmployeeDashboardController extends AbstractDashboardController
 {
-    #[Route('/admin', name: 'admin')]
+    #[Route('/employee', name: 'employee')]
     public function index(): Response
     {
-        return $this->render('admin/index.html.twig');
+        return $this->render('admin/employee.html.twig');
 
     }
 
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Tp Hotel');
+            ->setTitle('Tp Hotel / Employee');
     }
 
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('Etablissements', 'fas fa-hotel', EtablissementHotel::class);
-        yield MenuItem::linkToCrud('Gérants', 'fa-solid fa-person', GerantHotel::class);
         yield MenuItem::linkToCrud('Suites', 'fa-solid fa-bed', SuiteHotel::class);
     }
 }
