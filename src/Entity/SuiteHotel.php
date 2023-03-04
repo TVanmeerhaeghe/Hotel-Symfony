@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SuiteHotelRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -31,6 +33,14 @@ class SuiteHotel
 
     #[ORM\ManyToOne(inversedBy: 'suites')]
     private ?EtablissementHotel $etablissementHotel = null;
+
+    #[ORM\OneToMany(mappedBy: 'Suite', targetEntity: Reservation::class)]
+    private Collection $reservations;
+
+    public function __construct()
+    {
+        $this->reservations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -105,6 +115,36 @@ class SuiteHotel
     public function setEtablissementHotel(?EtablissementHotel $etablissementHotel): self
     {
         $this->etablissementHotel = $etablissementHotel;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): self
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setSuite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): self
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getSuite() === $this) {
+                $reservation->setSuite(null);
+            }
+        }
 
         return $this;
     }

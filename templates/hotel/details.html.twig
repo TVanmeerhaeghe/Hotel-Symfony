@@ -5,9 +5,13 @@
     {% for suite in etablissement.suites %}
         <ul>
             <li> {{ suite.titre }}</li>
+            <li> {{ suite.img }}</li>
             <li> {{ suite.description }}</li>
             <li> {{ suite.prix }} €</li>
         </ul>
+        <div>
+            <a href="{{ path('suite_reservation',{id : suite.id})}}">Reservez cette chambre</a>
+        </div>
     {% endfor %}
 
 {% endblock %}

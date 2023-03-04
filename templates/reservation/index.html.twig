@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ReservationController!{% endblock %}
+
+{% block body %}
+    <h1>Pour réserver la chambre {{ suite.titre }} veuillez remplir ce formulaire</h1>
+    <div>
+        {{form(form)}}
+    </div>
+
+    <div>
+        {%for label, messages in app.flashes %}
+            {% for message in messages %}
+            <div class="flash-{{ label }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+{% endblock %}

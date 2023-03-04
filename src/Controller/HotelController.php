@@ -6,7 +6,9 @@ use Symfony\component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\Persistence\ManagerRegistry;
+
 use App\Entity\EtablissementHotel;
+use App\Entity\SuiteHotel;
 
 class HotelController extends AbstractController
 {
