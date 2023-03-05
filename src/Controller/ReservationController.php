@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\FormError;
 
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -25,18 +26,28 @@ class ReservationController extends AbstractController
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $doctrine->getManager();
+            // Vérifier si la chambre est déjà réservée à la date de réservation
+            $existingReservation = $suite->getReservations()->filter(function ($r) use ($reservation) {
+                return $r->getDate() == $reservation->getDate();
+            })->first();
 
-            $reservation=$form->getData();
-            
-            $reservation->setSuite($suite);
-            $entityManager->persist($reservation);
-            $entityManager->flush();
+            if ($existingReservation) {
+                // Afficher une erreur dans le formulaire si la chambre est déjà réservée
+                $form->get('date')->addError(new FormError('Cette chambre est déjà réservée à cette date.'));
+            } else {
+                $entityManager = $doctrine->getManager();
 
-            $this->addFlash(
-                'reservation',
-                'Votre reservation a bien étais envoyer !'
-            );
+                $reservation=$form->getData();
+                
+                $reservation->setSuite($suite);
+                $entityManager->persist($reservation);
+                $entityManager->flush();
+
+                $this->addFlash(
+                    'reservation',
+                    'Votre reservation a bien étais envoyer !'
+                );
+            }
         }
 
         return $this->render('reservation/index.html.twig', ['suite' => $suite, 'form' => $form]);
