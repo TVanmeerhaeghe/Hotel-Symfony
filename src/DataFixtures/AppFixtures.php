@@ -69,6 +69,42 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
+    public function loadReservation(ObjectManager $manager, $faker) {
+
+        for($i=1; $i<=5;$i++) {
+            $reservation = new Reservation();
+            $currentSuite = $this->getReference('suite_'.mt_rand(1,20));
+            $reservation->setSuite($currentSuite);
+            $suite->setNom($faker->word());
+            $reservation->setMail($faker->word());
+            $reservation->setTel(5555555);
+            $reservation->setDate($faker->date());
+            $manager->persist($reservation);
+        }
+        $manager->flush();
+    }
+
+    public function loadGerant(ObjectManager $manager, $faker) {
+        for($i=1; $i<=3;$i++) {
+            $gerant = new GerantHotel();
+            $gerant->setUserName($faker->word());
+            $gerant->setRoles(['ROLE_EMPLOYEE']);
+            $gerant->setNom($faker->word());
+            $gerant->setPrenom($faker->word());
+            $gerant->setMail($faker->word());;
+            $currentEtablissement = $this->getReference('etablissement_'.mt_rand(1,5));
+            $gerant->setEtablissementHotel($currentEtablissement);
+            $gerant->setPassword(
+            $this->userPasswordHasherInterface->hashPassword(
+                $gerant, 'gerant'
+            )
+            );
+
+            $manager->persist($gerant);
+        }
+        $manager->flush();
+    }
+
 
     public function load(ObjectManager $manager): void
     {
@@ -77,5 +113,6 @@ class AppFixtures extends Fixture
         $this->loadAdmin($manager);
         $this->loadEtablissement($manager, $faker);
         $this->loadSuite($manager,$faker);
+        $this->loadGerant($manager,$faker);
     }
 }
