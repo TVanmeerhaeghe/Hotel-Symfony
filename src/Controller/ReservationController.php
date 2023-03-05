@@ -16,19 +16,21 @@ use App\Entity\SuiteHotel;
 class ReservationController extends AbstractController
 {
     #[Route('/reservation/{id}', name: 'suite_reservation')]
-    public function single(Request $request, ManagerRegistry $doctrine, int $id): Response{
+    public function add(Request $request, ManagerRegistry $doctrine, int $id): Response{
         $suiteRepository = $doctrine->getRepository(SuiteHotel::class); 
         $suite = $suiteRepository->find($id);
 
         $reservation = new Reservation();
-        $form = $this->createForm(ReservationType::class, $reservation);
+        $form = $this->createForm(ReservationType::class, $reservation, ['suite' => $suite]);
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
             $entityManager = $doctrine->getManager();
 
             $reservation=$form->getData();
-            $entityManager->persist($resevration);
+            
+            $reservation->setSuite($suite);
+            $entityManager->persist($reservation);
             $entityManager->flush();
 
             $this->addFlash(
